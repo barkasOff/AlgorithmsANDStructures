@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace DataStructures.Core
 {
     public class                List<T>
-            where T : IComparable<T>
+        where T : IComparable<T>
     {
         private class           Link
         {

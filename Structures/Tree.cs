@@ -3,9 +3,9 @@ using System;
 namespace Structures
 {
     public class        Tree<T>
-            where T : IComparable<T>
+        where T : IComparable<T>
     {
-        private class   Node
+        protected class Node
         {
             public T    Data { get; set; }
             public int  DataCount { get; set; }
@@ -21,7 +21,7 @@ namespace Structures
             }
         }
         
-        private Node    _root = null;
+        protected Node  _root = null;
         private int     _count = 0;
 
         public T        Root => _root.Data ?? default(T);
@@ -38,7 +38,7 @@ namespace Structures
         public void     Remove(T data)
         {
             if (!Contains(data))
-                throw new NullReferenceException("Дерево оказалось пустым :(");
+                throw new NullReferenceException("Дерево не содержит элементов!!");
             RemoveFromNode(_root, data);
             --_count;
         }
