@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DataStructures.Core
+namespace Structures
 {
     public class                List<T>
         where T : IComparable<T>
@@ -143,6 +143,19 @@ namespace DataStructures.Core
                 prevList = currentLink;
                 currentLink = nextLink;
             }
+        }
+        public bool             Contains(T data)
+        {
+            var     cur = _head;
+            bool    res = false;
+
+            while (!res && cur != null)
+            {
+                if (cur.Data.CompareTo(data) == 0)
+                    res = true;
+                cur = cur.Next;
+            }
+            return (res);
         }
         public void             Clear()
         {

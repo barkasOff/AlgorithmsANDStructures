@@ -29,7 +29,8 @@ namespace Algorithms
         {
             if (node != null)
             {
-                action(node.Data);
+                for (int i = 0; i < node.DataCount; ++i)
+                    action(node.Data);
                 PreOrderTraversal(action, node.Left);
                 PreOrderTraversal(action, node.Right);
             }
@@ -38,18 +39,20 @@ namespace Algorithms
         {
             if (node != null)
             {
-                PreOrderTraversal(action, node.Left);
-                PreOrderTraversal(action, node.Right);
-                action(node.Data);
+                PostOrderTraversal(action, node.Left);
+                PostOrderTraversal(action, node.Right);
+                for (int i = 0; i < node.DataCount; ++i)
+                    action(node.Data);
             }
         }
         private void    InOrderTraversal(Action<T> action, Node node)
         {
             if (node != null)
             {
-                PreOrderTraversal(action, node.Left);
-                action(node.Data);
-                PreOrderTraversal(action, node.Right);
+                InOrderTraversal(action, node.Left);
+                for (int i = 0; i < node.DataCount; ++i)
+                    action(node.Data);
+                InOrderTraversal(action, node.Right);
             }
         }
     }

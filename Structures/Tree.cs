@@ -52,14 +52,22 @@ namespace Structures
 
         private void    AddToNode(Node dir, T data)
         {
-            if (dir == null)
-                dir = new Node(data);
-            else if (dir.Data.CompareTo(data) == 0)
+            if (dir.Data.CompareTo(data) == 0)
                 ++dir.DataCount;
-            else if (dir.Data.CompareTo(data) == -1)
-                AddToNode(dir.Left, data);
             else if (dir.Data.CompareTo(data) > 0)
-                AddToNode(dir.Right, data);
+            {
+                if (dir.Left != null)
+                    AddToNode(dir.Left, data);
+                else
+                    dir.Left = new Node(data);
+            }
+            else if (dir.Data.CompareTo(data) == -1)
+            {
+                if (dir.Right != null)
+                    AddToNode(dir.Right, data);
+                else
+                    dir.Right = new Node(data);
+            }
         }
         private void    RemoveFromNode(Node dir, T data, Node prevDir = null)
         {
@@ -83,9 +91,9 @@ namespace Structures
                     right = right.Left;
                 }
             }
-            else if (dir.Data.CompareTo(data) == -1)
-                RemoveFromNode(dir.Left, data, dir);
             else if (dir.Data.CompareTo(data) > 0)
+                RemoveFromNode(dir.Left, data, dir);
+            else if (dir.Data.CompareTo(data) == -1)
                 RemoveFromNode(dir.Right, data, dir);
         }
         private Node    FindNode(T data)

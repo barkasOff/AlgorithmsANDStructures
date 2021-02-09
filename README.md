@@ -18,4 +18,4 @@
 
 ## Разработчик
 
-barkasOff
+barkasOff - https://github.com/barkasOff
