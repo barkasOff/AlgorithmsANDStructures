@@ -15,10 +15,11 @@ namespace DataStructures.Core
                 Data = data;
         }
 
+        private int             _count = 0;
         private Link            _head = null;
         private Link            _tail = null;
 
-        public int              Count { get; private set; }
+        public int              Count => _count;
 
         public void             PushFront(T data)
         {
@@ -29,7 +30,7 @@ namespace DataStructures.Core
             _head = newEl;
             if (Count == 0)
                 _tail = newEl;
-            ++Count;
+            ++_count;
         }
         public void             PushBack(T data)
         {
@@ -40,7 +41,7 @@ namespace DataStructures.Core
             else
                 _tail.Next = newEl;
             _tail = newEl;
-            ++Count;
+            ++_count;
         }
         public void             InsertBefore(T beforeData, T data)
         {
@@ -58,7 +59,7 @@ namespace DataStructures.Core
                 newEl.Next = copyHead.Next;
                 copyHead.Next = newEl;
             }
-            ++Count;
+            ++_count;
         }
         public void             InsertAfter(T afterData, T data)
         {
@@ -78,7 +79,7 @@ namespace DataStructures.Core
                 newEl.Next = copyHead.Next;
                 copyHead.Next = newEl;
             }
-            ++Count;
+            ++_count;
         }
         public void             PopFront()
         {
@@ -89,7 +90,7 @@ namespace DataStructures.Core
             _head = copyHead.Next;
             if (_head == null)
                 _tail = null;
-            --Count;
+            --_count;
         }
         public void             PopBack()
         {
@@ -108,7 +109,7 @@ namespace DataStructures.Core
             else
                 previousLink.Next = null;
             _tail = previousLink;
-            --Count;
+            --_count;
         }
         public void             Remove(T data)
         {
@@ -128,7 +129,7 @@ namespace DataStructures.Core
                 previousLink.Next = currentLink.Next;
             if ((previousLink != null && previousLink.Next == null) || _head == null)
                 _tail = null;
-            --Count;
+            --_count;
         }
         public void             Reverse()
         {
@@ -142,13 +143,12 @@ namespace DataStructures.Core
                 prevList = currentLink;
                 currentLink = nextLink;
             }
-
         }
         public void             Clear()
         {
             _head = null;
             _tail = null;
-            Count = 0;
+            _count = 0;
         }
 
         public T                this[int index]
