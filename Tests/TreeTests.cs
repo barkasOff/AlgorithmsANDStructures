@@ -1,3 +1,4 @@
+using System;
 using Algorithms;
 using Structures;
 using Xunit;
@@ -17,22 +18,82 @@ namespace Tests
         public void                          Test()
         {
             var tree = new TreeTraversal<int>();
-            var resAdd = AddingTest(tree);
+            var resList = new List<int>();
+            var resAdd = false;
+            var resRemove = false;
+            var clearRemove = false;
 
-            Assert.True(resAdd, "Сортировка не правильная!!");
+            Init(tree, resList);
+            resAdd = InOrderTest(tree, resList, "Сортировка или добавление");
+
+            tree.Remove(11);
+            resList.Remove(11);
+            resRemove = InOrderTest(tree, resList, "\nУдаление - 11");
+            Init(tree, resList);
+            tree.Remove(60);
+            resList.Remove(60);
+            resRemove = InOrderTest(tree, resList, "\nУдаление - 60");
+            Init(tree, resList);
+            tree.Remove(35);
+            resList.Remove(35);
+            resRemove = InOrderTest(tree, resList, "\nУдаление - 35");
+            Init(tree, resList);
+            tree.Remove(68);
+            resList.Remove(68);
+            resRemove = InOrderTest(tree, resList, "\nУдаление - 68");
+            Init(tree, resList);
+            tree.Remove(42);
+            resList.Remove(42);
+            resRemove = InOrderTest(tree, resList, "\nУдаление - 42");
+            Init(tree, resList);
+            tree.Remove(17);
+            resList.Remove(17);
+            resRemove = InOrderTest(tree, resList, "\nУдаление - 17");
+            
+            try
+            {
+                tree.Clear();
+                resList.Clear();
+                clearRemove = InOrderTest(tree, resList, "\nОчищение");
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Дерево не содержит элементов!!")
+                    clearRemove = true;
+            }
+
+            Assert.True(resAdd, "Ошибка в сортировке или добавлении!!");
+            Assert.True(resRemove, "Ошибка в удалении!!");
+            Assert.True(clearRemove, "Ошибка очищения!!");
         }
 
-        private bool                        AddingTest(TreeTraversal<int> tree)
+        private bool                        InOrderTest(TreeTraversal<int> tree, List<int> resList, string info)
         {
-            var resList = new List<int>();
             var res = true;
 
+            _inOrder.Clear();
+            _testOutputHelper.WriteLine(info);
+            tree.InOrderTraversal(AddToList);
+            _testOutputHelper.WriteLine($"{tree.Count}. {_inOrder.Count} {resList.Count}");
+            for (int i = 0; i < resList.Count; ++i)
+            {
+                _testOutputHelper.WriteLine($"{i + 1}. {_inOrder[i]} - {resList[i]}");
+                if (_inOrder[i] != resList[i])
+                    res = false;
+            }
+            return (res);
+        }
+        private void                        Init(TreeTraversal<int> tree, List<int> resList)
+        {
+            tree.Clear();
+            resList.Clear();
             #region resList Add
 
             resList.PushBack(11);
             resList.PushBack(17);
             resList.PushBack(23);
             resList.PushBack(24);
+            resList.PushBack(25);
             resList.PushBack(35);
             resList.PushBack(42);
             resList.PushBack(60);
@@ -55,20 +116,10 @@ namespace Tests
             tree.Add(68);
             tree.Add(68);
             tree.Add(69);
+            tree.Add(25);
 
             #endregion
-            
-            tree.InOrderTraversal(AddToList);
-            _testOutputHelper.WriteLine($"{tree.Count}. {_inOrder.Count} {resList.Count}");
-            for (int i = 0; i < resList.Count; ++i)
-            {
-                _testOutputHelper.WriteLine($"{i + 1}. {_inOrder[i]} - {resList[i]}");
-                if (_inOrder[i] != resList[i])
-                    res = false;
-            }
-            return (res);
         }
-
         private void                         AddToList(int data) =>
             _inOrder.PushBack(data);
     }

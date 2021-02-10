@@ -37,13 +37,13 @@ namespace Structures
         }
         public void     Remove(T data)
         {
-            if (!Contains(data))
+            if (_root == null)
                 throw new NullReferenceException("Дерево не содержит элементов!!");
             RemoveFromNode(_root, data);
             --_count;
         }
         public bool     Contains(T data) =>
-            FindNode(data) == null;
+            FindNode(data) != null;
         public void     Clear()
         {
             _root = null;
@@ -54,7 +54,7 @@ namespace Structures
         {
             if (dir.Data.CompareTo(data) == 0)
                 ++dir.DataCount;
-            else if (dir.Data.CompareTo(data) > 0)
+            else if (dir.Data.CompareTo(data) == 1)
             {
                 if (dir.Left != null)
                     AddToNode(dir.Left, data);
@@ -71,30 +71,65 @@ namespace Structures
         }
         private void    RemoveFromNode(Node dir, T data, Node prevDir = null)
         {
-            if (dir.Data.CompareTo(data) == 0)
+            if (dir == null)
+                throw new NullReferenceException($"Элемент {data} не найден!!");
+            else if (dir.Data.CompareTo(data) == 0 && dir.DataCount > 1)
+                --dir.DataCount;
+            else if (dir.Data.CompareTo(data) == 0)
             {
                 if (dir.Left == null && dir.Right == null)
-                    dir = null;
+                {
+                    if (prevDir == null)
+                        dir = null;
+                    else if (prevDir.Left != null && prevDir.Left.Data.CompareTo(dir.Data) == 0)
+                        prevDir.Left = null;
+                    else
+                        prevDir.Right = null;
+                }
                 else if (dir.Left != null && dir.Right == null)
-                    dir = dir.Left;
+                {
+                    if (prevDir == null)
+                        _root = _root.Left;
+                    else if (prevDir.Left != null && prevDir.Left.Data.CompareTo(data) == 0)
+                        prevDir.Left = dir.Left;
+                    else
+                        prevDir.Right = dir.Left;
+                }
                 else if (dir.Right != null && dir.Left == null)
-                    dir = dir.Right;
-                else if (dir.Left.Right == null)
-                    dir = dir.Left;
+                {
+                    if (prevDir == null)
+                        _root = _root.Right;
+                    else if (prevDir.Left != null && prevDir.Left.Data.CompareTo(data) == 0)
+                        prevDir.Left = dir.Right;
+                    else
+                        prevDir.Right = dir.Right;
+                }
                 else
                 {
                     var right = dir.Left;
+                    Node prevRight = null;
 
                     while (right.Right != null)
+                    {
+                        prevRight = right;
                         right = right.Right;
-                    dir.Data = right.Data;
-                    right = right.Left;
+                    }
+                    if (prevDir == null)
+                        _root.Data = right.Data;
+                    else if (prevDir.Left != null && prevDir.Left.Data.CompareTo(data) == 0)
+                        prevDir.Left.Data = right.Data;
+                    else
+                        prevDir.Right.Data = right.Data;
+                    if (prevRight != null)
+                        prevRight.Right = right.Left;
+                    else if (prevDir != null)
+                        dir.Left = right.Left;
                 }
             }
-            else if (dir.Data.CompareTo(data) > 0)
-                RemoveFromNode(dir.Left, data, dir);
             else if (dir.Data.CompareTo(data) == -1)
                 RemoveFromNode(dir.Right, data, dir);
+            else if (dir.Data.CompareTo(data) == 1)
+                RemoveFromNode(dir.Left, data, dir);
         }
         private Node    FindNode(T data)
         {
@@ -106,9 +141,9 @@ namespace Structures
                 {
                     if (res.Data.CompareTo(data) == 0)
                         break ;
-                    else if (res.Data.CompareTo(data) == -1)
+                    else if (res.Data.CompareTo(data) == 1)
                         res = res.Left;
-                    else if (res.Data.CompareTo(data) > 0)
+                    else if (res.Data.CompareTo(data) == -1)
                         res = res.Right;
                 }
             }
